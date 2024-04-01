@@ -1,0 +1,59 @@
+<HTML>
+<HEAD></HEAD>
+<BODY>
+  <input type="text" id="myInput" onkeypress="iniGetData(event)">
+  <script type="text/javascript" src="decrypt.js"></script>
+  <script type="text/javascript" src="data.js"></script>
+  <script type="text/javascript" src="key_material.js"></script>
+<SCRIPT>
+
+function getData()
+{
+    var i;
+    var input = document.getElementById('myInput');
+    var passphrase_str = input.value;
+
+    // convert passphrase to integer array
+    const passphrase_intArr = [];
+    for (i = 0; i < passphrase_str.length; i++)
+    passphrase_intArr.push(passphrase_str.charCodeAt(i));
+    
+    // carve the key
+    key = decrypt_byte_by_byte(passphrase_intArr, key_material);
+    
+    // decrypt data
+    data_intArr = decrypt_swap(key, data);
+    data_intArr = decrypt_rotate(key, data_intArr);
+    
+    var fileContent = "";
+    for (i=0; i < data.length; i++)
+    fileContent += data_intArr[i].toString(16).padStart(2, '0') + " ";
+    
+    
+    // Create a Blob object with the file content
+    var blob = new Blob([fileContent], { type: "text/plain" });
+
+    // Create a temporary URL for the Blob object
+    var fileUrl = URL.createObjectURL(blob);
+
+
+    // Open a new window
+    var newWindow = window.open(fileUrl, "_blank");
+    
+    if (!newWindow)
+    alert("Window cannot be displayed");
+}
+
+function iniGetData(event)
+{
+    if (event.keyCode !== 13) 
+    return;
+    
+    document.body.style.backgroundColor = "grey";
+    
+    setTimeout(function() {getData();}, 1000); // 1000 = 1 seconds
+}
+
+</SCRIPT>
+</BODY>
+</HTML>
