@@ -8,7 +8,7 @@ args = sys.argv
 def print_info():
     print("")
     print("Encrypt object:")
-    print("encrypt_object.py e [passphase] [size_of_key] [object]")
+    print("encrypt_object.py e [passphrase] [size_of_key] [object]")
     print("")
     print("Example:")
     print("encrypt_object.py e \"good@forgetting\" 4096 data.txt")
@@ -59,14 +59,14 @@ if args[1] == 'e':
         print("File not found")
         exit()
 
-    passphase = args[2]
+    passphrase = args[2]
     key_size = args[3]
     #output_file = args[4].rsplit(".", 1)[0] + ".js"
     
     # convert each character into an integer
-    passphase_intArr=[]
-    for ch in passphase:
-        passphase_intArr.append(ord(ch))
+    passphrase_intArr=[]
+    for ch in passphrase:
+        passphrase_intArr.append(ord(ch))
         
     data_intArr=[]
     for ch in data_raw:
@@ -88,7 +88,7 @@ if args[1] == 'e':
     
     # create the key material
     keyMat_intArr = key_intArr
-    encrypt_byte_by_byte(passphase_intArr, keyMat_intArr)
+    encrypt_byte_by_byte(passphrase_intArr, keyMat_intArr)
     
     # output data to js file
     data_jsVar="var data = ["
